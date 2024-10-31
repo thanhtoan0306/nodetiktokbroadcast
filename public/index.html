@@ -1,5 +1,28 @@
 <!DOCTYPE html>
 <html>
+<style>
+    #container {
+        position: relative;
+        width: 450px;
+        height: 450px;
+        border: 1px solid black;
+    }
+
+    .ball {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+    }
+
+    .red {
+        background-color: red;
+    }
+
+    .blue {
+        background-color: blue;
+    }
+</style>
 
 <head>
     <title>WebSocket Client</title>
@@ -8,27 +31,115 @@
 <body>
     <h1>WebSocket Client</h1>
     <div id="messages"></div>
-
+    <div id="container"></div>
+    <button id="addBallButton">Add Ball</button>
+    <button id="connectBtn" onclick="connect()">Connect</button>
+    <button id="disconnectBtn" onclick="disconnect()" disabled>Disconnect</button>
     <script>
-        const ws = new WebSocket('ws://localhost:8080');
 
-        ws.onopen = function () {
-            appendMessage('Connected to the server');
-        };
 
-        ws.onmessage = function (event) {
-            appendMessage('Received from server: ' + event.data);
-            console.log('debug21:', event.data);
-            console.log('debug22:', event);
+        // const ws = new WebSocket('ws://localhost:8080');
 
-        };
+        // ws.onopen = function () {
+        //     appendMessage('Connected to the server');
+        // };
 
-        function appendMessage(message) {
-            const messagesElement = document.getElementById('messages');
-            const p = document.createElement('p');
-            p.textContent = message;
-            messagesElement.appendChild(p);
+        // ws.onmessage = function (event) {
+        //     appendMessage('Received from server: ' + event.data);
+        //     console.log('debug21:', event.data);
+        //     console.log('debug22:', event);
+
+        // };
+
+        // function appendMessage(message) {
+        //     const messagesElement = document.getElementById('messages');
+        //     const p = document.createElement('p');
+        //     p.textContent = message;
+        //     messagesElement.appendChild(p);
+        // }
+
+
+        let ws = null;
+
+        function connect() {
+            ws = new WebSocket('ws://localhost:8080');
+
+            ws.onopen = function () {
+                document.getElementById('connectBtn').disabled = true;
+                document.getElementById('disconnectBtn').disabled = false;
+            };
+
+            ws.onmessage = function (event) {
+                console.log('debug22:', event);
+                const newBall = {
+                    x: Math.floor(Math.random() * 380),
+                    y: Math.floor(Math.random() * 380),
+                    dx: Math.floor(Math.random() * 4) - 2,
+                    dy: Math.floor(Math.random() * 4) - 2,
+                    color: 'red' // Change color as needed
+                };
+                balls.push(newBall);
+                console.log(balls);
+                
+                // appendMessage('Received from server: ' + event.data);
+            };
+
+                    const container = document.getElementById('container');
+            const balls = [
+                { x: 50, y: 50, dx: 2, dy: 2, color: 'red' },
+                { x: 100, y: 100, dx: -1, dy: -2, color: 'blue' }
+            ];
+
+            function moveBall(ball) {
+                ball.x += ball.dx;
+                ball.y += ball.dy;
+
+                if (ball.x <= 0 || ball.x >= 380) {
+                    ball.dx = -ball.dx;
+                }
+
+                if (ball.y <= 0 || ball.y >= 380) {
+                    ball.dy = -ball.dy;
+                }
+            }
+
+            function updateBalls() {
+                container.innerHTML = ''; // Clear container
+                balls.forEach(ball => {
+                    moveBall(ball);
+                    const ballElement = document.createElement('div');
+                    ballElement.className = `ball ${ball.color}`;
+                    ballElement.style.left = ball.x + 'px';
+                    ballElement.style.top = ball.y + 'px';
+                    container.appendChild(ballElement);
+                });
+            }
+
+            document.getElementById('addBallButton').addEventListener('click', () => {
+                const newBall = {
+                    x: Math.floor(Math.random() * 380),
+                    y: Math.floor(Math.random() * 380),
+                    dx: Math.floor(Math.random() * 4) - 2,
+                    dy: Math.floor(Math.random() * 4) - 2,
+                    color: 'blue' // Change color as needed
+                };
+                balls.push(newBall);
+            });
+
+            setInterval(updateBalls, 10);
+
         }
+
+        function disconnect() {
+            if (ws) {
+                ws.close();
+                ws = null;
+                document.getElementById('connectBtn').disabled = false;
+                document.getElementById('disconnectBtn').disabled = true;
+            }
+        }
+
+
     </script>
 </body>
 
