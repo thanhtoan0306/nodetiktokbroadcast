@@ -25,11 +25,11 @@
 </style>
 
 <head>
-    <title>WebSocket Client</title>
+    <title>Halloween</title>
 </head>
 
 <body>
-    <h1>WebSocket Client</h1>
+    <h1>Halloween</h1>
     <div id="messages"></div>
     <div id="container"></div>
     <button id="addBallButton">Add Ball</button>
@@ -61,7 +61,7 @@
             balls.forEach(ball => {
                 moveBall(ball);
                 const ballElement = document.createElement('img');
-                ballElement.src = '/public/placeholder.png';
+                ballElement.src = ball.avatar || '/public/placeholder.png';
 
                 ballElement.className = `ball ${ball.color}`;
                 ballElement.style.left = ball.x + 'px';
@@ -76,7 +76,8 @@
                 y: Math.floor(Math.random() * 380),
                 dx: Math.floor(Math.random() * 4) - 2,
                 dy: Math.floor(Math.random() * 4) - 2,
-                color: 'blue' // Change color as needed
+                color: 'blue', // Change color as needed
+                avatar: ''
             };
             balls.push(newBall);
         });
@@ -95,17 +96,25 @@
 
             ws.onmessage = function (event) {
                 console.log('debug22:', event);
-                const newBall = {
-                    x: Math.floor(Math.random() * 380),
-                    y: Math.floor(Math.random() * 380),
-                    dx: Math.floor(Math.random() * 4) - 2,
-                    dy: Math.floor(Math.random() * 4) - 2,
-                    color: 'red' // Change color as needed
-                };
-                balls.push(newBall);
-                console.log(balls);
-                
-                // appendMessage('Received from server: ' + event.data);
+                const user = JSON.parse(event.data).data;
+                console.log(user);
+                const avatar = user.profilePictureUrl
+                const comment = user.comment
+                if (comment == '1') {
+                    const newBall = {
+                        x: Math.floor(Math.random() * 380),
+                        y: Math.floor(Math.random() * 380),
+                        dx: Math.floor(Math.random() * 4) - 2,
+                        dy: Math.floor(Math.random() * 4) - 2,
+                        color: 'red', // Change color as needed
+                        avatar: avatar || "public/placeholder.png"
+
+                    };
+                    balls.push(newBall);
+                    console.log(balls);
+                }
+
+
             };
         }
 

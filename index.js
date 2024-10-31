@@ -1,7 +1,7 @@
 const { WebcastPushConnection } = require('tiktok-live-connector');
 
 // Username of someone who is currently live
-let tiktokUsername = "pubgmobileesports";
+let tiktokUsername = "ninineek";
 
 // Create a new wrapper object and pass the username
 let tiktokLiveConnection = new WebcastPushConnection(tiktokUsername);
