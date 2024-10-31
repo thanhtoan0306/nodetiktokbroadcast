@@ -10,8 +10,8 @@
 
     .ball {
         position: absolute;
-        width: 20px;
-        height: 20px;
+        width: 60px;
+        height: 60px;
         border-radius: 50%;
     }
 
@@ -37,27 +37,6 @@
     <button id="disconnectBtn" onclick="disconnect()" disabled>Disconnect</button>
     <script>
 
-
-        // const ws = new WebSocket('ws://localhost:8080');
-
-        // ws.onopen = function () {
-        //     appendMessage('Connected to the server');
-        // };
-
-        // ws.onmessage = function (event) {
-        //     appendMessage('Received from server: ' + event.data);
-        //     console.log('debug21:', event.data);
-        //     console.log('debug22:', event);
-
-        // };
-
-        // function appendMessage(message) {
-        //     const messagesElement = document.getElementById('messages');
-        //     const p = document.createElement('p');
-        //     p.textContent = message;
-        //     messagesElement.appendChild(p);
-        // }
-
         const container = document.getElementById('container');
         const balls = [
             { x: 50, y: 50, dx: 2, dy: 2, color: 'red' },
@@ -68,11 +47,11 @@
             ball.x += ball.dx;
             ball.y += ball.dy;
 
-            if (ball.x <= 0 || ball.x >= 380) {
+            if (ball.x <= 0 || ball.x >= 390) {
                 ball.dx = -ball.dx;
             }
 
-            if (ball.y <= 0 || ball.y >= 380) {
+            if (ball.y <= 0 || ball.y >= 390) {
                 ball.dy = -ball.dy;
             }
         }
@@ -81,7 +60,9 @@
             container.innerHTML = ''; // Clear container
             balls.forEach(ball => {
                 moveBall(ball);
-                const ballElement = document.createElement('div');
+                const ballElement = document.createElement('img');
+                ballElement.src = '/public/placeholder.png';
+
                 ballElement.className = `ball ${ball.color}`;
                 ballElement.style.left = ball.x + 'px';
                 ballElement.style.top = ball.y + 'px';
