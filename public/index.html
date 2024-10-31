@@ -15,12 +15,79 @@
         border-radius: 50%;
     }
 
+    .small-ball {
+        position: absolute;
+        width: 20px !important;
+        height: 20px !important;
+        border-radius: 50%;
+    }
+
+    .phan-than-ball {
+        position: absolute;
+        width: 10px !important;
+        height: 10px !important;
+        border-radius: 50%;
+    }
+
     .red {
         background-color: red;
     }
 
     .blue {
         background-color: blue;
+    }
+
+    @keyframes spin {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .spin-image {
+        animation: spin 0.1s linear infinite;
+        /* Rotate the image continuously */
+    }
+
+    .coin {
+        font-size: 200px;
+        width: 0.1em;
+        height: 1em;
+        background: linear-gradient(#faa504, #141001);
+        margin: auto;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        animation: rotate_4001510 7s infinite linear;
+        transform-style: preserve-3d;
+    }
+
+    .coin .tails,
+    .coin:after {
+        left: -0.4em;
+        transform: rotateY(90deg);
+    }
+
+    .coin:before,
+    .coin:after {
+        background: linear-gradient(#faa504, #141001);
+        backface-visibility: hidden;
+        transform: rotateY(90deg);
+    }
+
+    .coin:after {
+        transform: rotateY(-90deg);
+    }
+
+    @keyframes rotate_4001510 {
+        100% {
+            transform: rotateY(360deg);
+        }
     }
 </style>
 
@@ -62,8 +129,7 @@
                 moveBall(ball);
                 const ballElement = document.createElement('img');
                 ballElement.src = ball.avatar || '/public/placeholder.png';
-
-                ballElement.className = `ball ${ball.color}`;
+                ballElement.className = `ball ${ball.color} ${ball.style}`;
                 ballElement.style.left = ball.x + 'px';
                 ballElement.style.top = ball.y + 'px';
                 container.appendChild(ballElement);
@@ -71,15 +137,21 @@
         }
 
         document.getElementById('addBallButton').addEventListener('click', () => {
-            const newBall = {
-                x: Math.floor(Math.random() * 380),
-                y: Math.floor(Math.random() * 380),
-                dx: Math.floor(Math.random() * 4) - 2,
-                dy: Math.floor(Math.random() * 4) - 2,
-                color: 'blue', // Change color as needed
-                avatar: ''
-            };
-            balls.push(newBall);
+
+            for (let i = 0; i < 10; i++) {
+                const newBall = {
+                    x: Math.floor(Math.random() * 380),
+                    y: Math.floor(Math.random() * 380),
+                    dx: Math.floor(Math.random() * 4) - 2,
+                    dy: Math.floor(Math.random() * 4) - 2,
+                    color: '', // Change color as needed
+                    avatar: "placeholder.png",
+                    style: 'phan-than-ball'
+
+                };
+                balls.push(newBall);
+                console.log(balls);
+            }
         });
 
         setInterval(updateBalls, 10);
@@ -106,8 +178,83 @@
                         y: Math.floor(Math.random() * 380),
                         dx: Math.floor(Math.random() * 4) - 2,
                         dy: Math.floor(Math.random() * 4) - 2,
-                        color: 'red', // Change color as needed
-                        avatar: avatar || "public/placeholder.png"
+                        color: '', // Change color as needed
+                        avatar: avatar || "placeholder.png"
+
+                    };
+                    balls.push(newBall);
+                    console.log(balls);
+                }
+                if (String(comment).toLocaleLowerCase() == 'x10') {
+                    const newBall = {
+                        x: Math.floor(Math.random() * 380),
+                        y: Math.floor(Math.random() * 380),
+                        dx: Math.floor(Math.random() * 40) - 2,
+                        dy: Math.floor(Math.random() * 40) - 2,
+                        color: '', // Change color as needed
+                        avatar: avatar || "placeholder.png",
+                        style: 'small-ball'
+
+                    };
+                    balls.push(newBall);
+                    console.log(balls);
+                }
+
+                if (String(comment).toLocaleLowerCase() == 'phanthan') {
+                    const newBall = {
+                        x: Math.floor(Math.random() * 380),
+                        y: Math.floor(Math.random() * 380),
+                        dx: Math.floor(Math.random() * 40) - 2,
+                        dy: Math.floor(Math.random() * 40) - 2,
+                        color: '', // Change color as needed
+                        avatar: avatar || "placeholder.png",
+                        style: 'phan-than-ball'
+
+                    };
+                    for (let i = 0; i < 10; i++) {
+                        balls.push(newBall);
+                        console.log(balls);
+                    }
+
+                }
+
+                if (String(comment).toLocaleLowerCase() == 'xoay') {
+                    const newBall = {
+                        x: Math.floor(Math.random() * 380),
+                        y: Math.floor(Math.random() * 380),
+                        dx: Math.floor(Math.random() * 40) - 2,
+                        dy: Math.floor(Math.random() * 40) - 2,
+                        color: '', // Change color as needed
+                        avatar: avatar || "placeholder.png",
+                        style: 'coin'
+                    };
+                    balls.push(newBall);
+                    console.log(balls);
+                }
+
+
+                if (String(comment).toLocaleLowerCase() == 'bido') {
+                    const newBall = {
+                        x: Math.floor(Math.random() * 380),
+                        y: Math.floor(Math.random() * 380),
+                        dx: Math.floor(Math.random() * 4) - 2,
+                        dy: Math.floor(Math.random() * 4) - 2,
+                        color: '', // Change color as needed
+                        avatar: "placeholder.png"
+
+                    };
+                    balls.push(newBall);
+                    console.log(balls);
+                }
+
+                if (String(comment).toLocaleLowerCase() == 'ghost') {
+                    const newBall = {
+                        x: Math.floor(Math.random() * 380),
+                        y: Math.floor(Math.random() * 380),
+                        dx: Math.floor(Math.random() * 4) - 2,
+                        dy: Math.floor(Math.random() * 4) - 2,
+                        color: '', // Change color as needed
+                        avatar: "ghost.jpg"
 
                     };
                     balls.push(newBall);
