@@ -58,6 +58,49 @@
         //     messagesElement.appendChild(p);
         // }
 
+        const container = document.getElementById('container');
+        const balls = [
+            { x: 50, y: 50, dx: 2, dy: 2, color: 'red' },
+            { x: 100, y: 100, dx: -1, dy: -2, color: 'blue' }
+        ];
+
+        function moveBall(ball) {
+            ball.x += ball.dx;
+            ball.y += ball.dy;
+
+            if (ball.x <= 0 || ball.x >= 380) {
+                ball.dx = -ball.dx;
+            }
+
+            if (ball.y <= 0 || ball.y >= 380) {
+                ball.dy = -ball.dy;
+            }
+        }
+
+        function updateBalls() {
+            container.innerHTML = ''; // Clear container
+            balls.forEach(ball => {
+                moveBall(ball);
+                const ballElement = document.createElement('div');
+                ballElement.className = `ball ${ball.color}`;
+                ballElement.style.left = ball.x + 'px';
+                ballElement.style.top = ball.y + 'px';
+                container.appendChild(ballElement);
+            });
+        }
+
+        document.getElementById('addBallButton').addEventListener('click', () => {
+            const newBall = {
+                x: Math.floor(Math.random() * 380),
+                y: Math.floor(Math.random() * 380),
+                dx: Math.floor(Math.random() * 4) - 2,
+                dy: Math.floor(Math.random() * 4) - 2,
+                color: 'blue' // Change color as needed
+            };
+            balls.push(newBall);
+        });
+
+        setInterval(updateBalls, 10);
 
         let ws = null;
 
@@ -83,51 +126,6 @@
                 
                 // appendMessage('Received from server: ' + event.data);
             };
-
-                    const container = document.getElementById('container');
-            const balls = [
-                { x: 50, y: 50, dx: 2, dy: 2, color: 'red' },
-                { x: 100, y: 100, dx: -1, dy: -2, color: 'blue' }
-            ];
-
-            function moveBall(ball) {
-                ball.x += ball.dx;
-                ball.y += ball.dy;
-
-                if (ball.x <= 0 || ball.x >= 380) {
-                    ball.dx = -ball.dx;
-                }
-
-                if (ball.y <= 0 || ball.y >= 380) {
-                    ball.dy = -ball.dy;
-                }
-            }
-
-            function updateBalls() {
-                container.innerHTML = ''; // Clear container
-                balls.forEach(ball => {
-                    moveBall(ball);
-                    const ballElement = document.createElement('div');
-                    ballElement.className = `ball ${ball.color}`;
-                    ballElement.style.left = ball.x + 'px';
-                    ballElement.style.top = ball.y + 'px';
-                    container.appendChild(ballElement);
-                });
-            }
-
-            document.getElementById('addBallButton').addEventListener('click', () => {
-                const newBall = {
-                    x: Math.floor(Math.random() * 380),
-                    y: Math.floor(Math.random() * 380),
-                    dx: Math.floor(Math.random() * 4) - 2,
-                    dy: Math.floor(Math.random() * 4) - 2,
-                    color: 'blue' // Change color as needed
-                };
-                balls.push(newBall);
-            });
-
-            setInterval(updateBalls, 10);
-
         }
 
         function disconnect() {
